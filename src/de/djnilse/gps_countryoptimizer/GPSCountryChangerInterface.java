@@ -59,9 +59,9 @@ public class GPSCountryChangerInterface extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		setLog("Asking for root permissions ...\n");
+		addLog("Asking for root permissions ...\n");
 
-		// remount system to acces /system
+		// remount system to access /system
 		try {
 			mountSystemRW();
 		} catch (IOException e3) {
@@ -73,23 +73,26 @@ public class GPSCountryChangerInterface extends Activity {
 		directory = getDir("code", MODE_PRIVATE);
 		file = new File(directory, "countrycode");
 
-		
 		/*
-		 * If no countrycode file was found, sets automatically to System Country
+		 * If no countrycode file was found, sets automatically to the country
+		 * you set your system to
 		 */
 		if (file.exists() == false) {
-			setLog("First use ? No worries, i set the gps.conf to the country you live in\n");
-			String location = getResources().getConfiguration().locale.getCountry().toLowerCase();
-			setLog("So you live in " + getResources().getConfiguration().locale.getDisplayCountry() + "  You're Welcome ;)\n");
-			setLog("Setting location to your country ...\n");
-			
+			addLog("First use ? No worries, i set the gps.conf to the country you live in\n");
+			String location = getResources().getConfiguration().locale
+					.getCountry().toLowerCase();
+			addLog("So you live in "
+					+ getResources().getConfiguration().locale
+							.getDisplayCountry() + "  You're Welcome ;)\n");
+			addLog("Setting location to your country ...\n");
+
 			try {
-				configureGPS(location);	//thats the important part i forgot :P
-				
+				configureGPS(location); // thats the important part i forgot :P
+
 				FileOutputStream fileOut;
 				fileOut = new FileOutputStream(file);
 				saveFile(fileOut, location);
-				setLog("Done!\n");
+				addLog("Done!\n");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -98,8 +101,6 @@ public class GPSCountryChangerInterface extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else { 		//if country code was found
-			
 		}
 
 		try {
@@ -114,12 +115,12 @@ public class GPSCountryChangerInterface extends Activity {
 		String countries[] = res.getStringArray(R.array.countries);
 
 		try {
-			setLog("Loading last selected country ...\n");
+			addLog("Loading last selected country ...\n");
 			verifyCode = loadCountryCode(fileIn);
 			for (int i = 0; i <= 83; i++) {
 				if (countrycodes[i].equals(verifyCode)) {
 					countrySpinner.setSelection(i, true);
-					setLog("Sucess! Last country selected was " + countries[i]
+					addLog("Sucess! Last country selected was " + countries[i]
 							+ "\n\n");
 					break;
 				}
@@ -142,7 +143,7 @@ public class GPSCountryChangerInterface extends Activity {
 		configureGPS(countrycodes[selectedId]);
 
 		try {
-			setLog("Saving countrycode for next time...\n");
+			addLog("Saving countrycode for next time...\n");
 
 			directory = getDir("code", MODE_PRIVATE);
 			file = new File(directory, "countrycode");
@@ -150,10 +151,10 @@ public class GPSCountryChangerInterface extends Activity {
 			FileOutputStream fileOut = new FileOutputStream(file);
 			saveFile(fileOut, countrycodes[selectedId]);
 
-			setLog("Sucess! C ya next time :D\n");
-			// setLog("");
-			setLog("This application was brought to you by djnilse@xda\n");
-			setLog("Thanks go to all of THE #GingerDX IRC channel :D");
+			addLog("Sucess! C ya next time :D\n");
+			// addLog("");
+			addLog("This application was brought to you by djnilse@xda\n");
+			addLog("Thanks go to all of THE #GingerDX IRC channel :D");
 			clearLog = true;
 
 		} catch (FileNotFoundException e) {
@@ -196,33 +197,32 @@ public class GPSCountryChangerInterface extends Activity {
 	private void configureGPS(String code) throws IOException,
 			InterruptedException {
 
-			setLog("Changing country in gps.conf... \n");
-			Process setnewgps = Runtime.getRuntime().exec(
-					new String[] {
-							"su",
-							"-c",
-							"sed 's/" + ".*NTP_SERVER=.*/NTP_SERVER=" 
-							+ code + ".pool.ntp.org" 
-							+ "/g' -i /system/etc/gps.conf"
-					});
-			setnewgps.waitFor();
-			Process setPerms = Runtime.getRuntime().exec(
-					new String[] { "su", "-c",
-							"chmod 0644 " + "/system/etc/gps.conf" });
-			setPerms.waitFor();
+		addLog("Changing country in gps.conf... \n");
+		Process setnewgps = Runtime.getRuntime().exec(
+				new String[] {
+						"su",
+						"-c",
+						"sed 's/" + ".*NTP_SERVER=.*/NTP_SERVER=" + code
+								+ ".pool.ntp.org"
+								+ "/g' -i /system/etc/gps.conf" });
+		setnewgps.waitFor();
+		Process setPerms = Runtime.getRuntime().exec(
+				new String[] { "su", "-c",
+						"chmod 0644 " + "/system/etc/gps.conf" });
+		setPerms.waitFor();
 
-			Resources res = getResources();
-			String countries[] = res.getStringArray(R.array.countries);
-			for (int i = 0; i <= 83; i++) {
-				if (countrycodes[i].equals(code)) {
-					setLog("gps.conf now configured for " + countries[i] + "\n");
-					break;
-				}
+		Resources res = getResources();
+		String countries[] = res.getStringArray(R.array.countries);
+		for (int i = 0; i <= 83; i++) {
+			if (countrycodes[i].equals(code)) {
+				addLog("gps.conf now configured for " + countries[i] + "\n");
+				break;
 			}
-
 		}
 
-	private void setLog(String log) {
+	}
+
+	private void addLog(String log) {
 		TextView txtViewLog = (TextView) findViewById(R.id.txtlog);
 		txtViewLog.setText(txtViewLog.getText().toString() + log);
 	}
@@ -238,3 +238,4 @@ public class GPSCountryChangerInterface extends Activity {
 		remountrw.waitFor();
 	}
 }
+
