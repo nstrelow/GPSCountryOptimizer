@@ -63,7 +63,7 @@ public class GPSCountryChangerInterface extends Activity {
 
 		// remount system to access /system
 		try {
-			mountSystemRW();
+			remountSystem(true);
 		} catch (IOException e3) {
 			e3.printStackTrace();
 		} catch (InterruptedException e3) {
@@ -78,12 +78,12 @@ public class GPSCountryChangerInterface extends Activity {
 		 * you set your system to
 		 */
 		if (file.exists() == false) {
-			addLog("First use ? No worries, i set the gps.conf to the country you live in\n");
+			addLog("First use ? No worries, I set the gps.conf to the country you live in\n");
 			String location = getResources().getConfiguration().locale
 					.getCountry().toLowerCase();
 			addLog("So you live in "
 					+ getResources().getConfiguration().locale
-							.getDisplayCountry() + "  You're Welcome ;)\n");
+							.getDisplayCountry() + ". You're welcome ;)\n");
 			addLog("Setting location to your country ...\n");
 
 			try {
@@ -120,7 +120,7 @@ public class GPSCountryChangerInterface extends Activity {
 			for (int i = 0; i <= 83; i++) {
 				if (countrycodes[i].equals(verifyCode)) {
 					countrySpinner.setSelection(i, true);
-					addLog("Sucess! Last country selected was " + countries[i]
+					addLog("Success! Last country selected was " + countries[i]
 							+ "\n\n");
 					break;
 				}
@@ -129,6 +129,22 @@ public class GPSCountryChangerInterface extends Activity {
 			e.printStackTrace();
 		}
 	}
+
+        /** Called when the activity is destroyed. */
+        @Override
+        public void onDestroy() {
+                addLog("Resetting filesystem mounts...\n");
+
+                // clean up system mount
+                try {
+                        remountSystem(false);
+                } catch (IOException e3) {
+                        e3.printStackTrace();
+                } catch (InterruptedException e3) {
+                        e3.printStackTrace();
+                }
+               super.onDestroy();
+        }
 
 	// changes the gps.conf and saves countrycode to /data
 	public void Start(View view) throws InterruptedException, IOException {
@@ -151,7 +167,7 @@ public class GPSCountryChangerInterface extends Activity {
 			FileOutputStream fileOut = new FileOutputStream(file);
 			saveFile(fileOut, countrycodes[selectedId]);
 
-			addLog("Sucess! C ya next time :D\n");
+			addLog("Success! C ya next time :D\n");
 			// addLog("");
 			addLog("This application was brought to you by djnilse@xda\n");
 			addLog("Thanks go to all of THE #GingerDX IRC channel :D");
@@ -197,8 +213,16 @@ public class GPSCountryChangerInterface extends Activity {
 	private void configureGPS(String code) throws IOException,
 			InterruptedException {
 
+                static Runtime rt = Runtime.getRuntime();
+                addLog("Backing up old gps.conf if necessary... \n");
+                Process gpsbackup = rt.exec(
+                                new String[] {
+                                                "su",
+                                                "-c",
+                                                "test -f /system/etc/gps.conf.orig || cp -a /system/etc/gps.conf /system/etc/gps.conf.orig" });
+                gpsbackup.waitFor();
 		addLog("Changing country in gps.conf... \n");
-		Process setnewgps = Runtime.getRuntime().exec(
+		Process setnewgps = rt.exec(
 				new String[] {
 						"su",
 						"-c",
@@ -228,14 +252,15 @@ public class GPSCountryChangerInterface extends Activity {
 	}
 
 	/*
-	 * remount system to write to /system/
+	 * remount system to write to /system/ or to finish up
 	 */
-	private void mountSystemRW() throws IOException, InterruptedException {
-		Process remountrw = Runtime
+	private void remountSystem(boolean doRW) throws IOException, InterruptedException {
+                String mountPerms = (doRW ? "rw" : "ro");
+		Process remount = Runtime
 				.getRuntime()
 				.exec(new String[] { "su", "-c",
-						"mount -o rw,remount -t yaffs2 /dev/block/mtdblock0 /system" });
-		remountrw.waitFor();
+						"mount -o " + mountPerms + ",remount /system" });
+		remount.waitFor();
 	}
 }
 
