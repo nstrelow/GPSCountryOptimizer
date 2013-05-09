@@ -213,7 +213,7 @@ public class GPSCountryChangerInterface extends Activity {
 	private void configureGPS(String code) throws IOException,
 			InterruptedException {
 
-                static Runtime rt = Runtime.getRuntime();
+                Runtime rt = Runtime.getRuntime();
                 addLog("Backing up old gps.conf if necessary... \n");
                 Process gpsbackup = rt.exec(
                                 new String[] {
