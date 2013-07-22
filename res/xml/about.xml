@@ -5,7 +5,7 @@
 <Preference 
 	style="?android:preferenceInformationStyle"
 	android:title="Current Version"
-	android:summary="v1 - GDX-Version"/>
+	android:summary="v3.0"/>
   
 <Preference 
 	style="?android:preferenceInformationStyle"

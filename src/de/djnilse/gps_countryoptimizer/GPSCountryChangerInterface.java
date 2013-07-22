@@ -130,21 +130,21 @@ public class GPSCountryChangerInterface extends Activity {
 		}
 	}
 
-        /** Called when the activity is destroyed. */
-        @Override
-        public void onDestroy() {
-                addLog("Resetting filesystem mounts...\n");
+	/** Called when the activity is destroyed. */
+	@Override
+	public void onDestroy() {
+		addLog("Resetting filesystem mounts...\n");
 
-                // clean up system mount
-                try {
-                        remountSystem(false);
-                } catch (IOException e3) {
-                        e3.printStackTrace();
-                } catch (InterruptedException e3) {
-                        e3.printStackTrace();
-                }
-               super.onDestroy();
-        }
+		// clean up system mount
+		try {
+			remountSystem(false);
+		} catch (IOException e3) {
+			e3.printStackTrace();
+		} catch (InterruptedException e3) {
+			e3.printStackTrace();
+		}
+		super.onDestroy();
+	}
 
 	// changes the gps.conf and saves countrycode to /data
 	public void Start(View view) throws InterruptedException, IOException {
@@ -213,22 +213,20 @@ public class GPSCountryChangerInterface extends Activity {
 	private void configureGPS(String code) throws IOException,
 			InterruptedException {
 
-                Runtime rt = Runtime.getRuntime();
-                addLog("Backing up old gps.conf if necessary... \n");
-                Process gpsbackup = rt.exec(
-                                new String[] {
-                                                "su",
-                                                "-c",
-                                                "test -f /system/etc/gps.conf.orig || cp -a /system/etc/gps.conf /system/etc/gps.conf.orig" });
-                gpsbackup.waitFor();
-		addLog("Changing country in gps.conf... \n");
-		Process setnewgps = rt.exec(
-				new String[] {
+		Runtime rt = Runtime.getRuntime();
+		addLog("Backing up old gps.conf if necessary... \n");
+		Process gpsbackup = rt
+				.exec(new String[] {
 						"su",
 						"-c",
-						"sed 's/" + ".*NTP_SERVER=.*/NTP_SERVER=" + code
-								+ ".pool.ntp.org"
-								+ "/g' -i /system/etc/gps.conf" });
+						"test -f /system/etc/gps.conf.orig || cp -a /system/etc/gps.conf /system/etc/gps.conf.orig" });
+		gpsbackup.waitFor();
+		addLog("Changing country in gps.conf... \n");
+		Process setnewgps = rt.exec(new String[] {
+				"su",
+				"-c",
+				"sed 's/" + ".*NTP_SERVER=.*/NTP_SERVER=" + code
+						+ ".pool.ntp.org" + "/g' -i /system/etc/gps.conf" });
 		setnewgps.waitFor();
 		Process setPerms = Runtime.getRuntime().exec(
 				new String[] { "su", "-c",
@@ -254,13 +252,12 @@ public class GPSCountryChangerInterface extends Activity {
 	/*
 	 * remount system to write to /system/ or to finish up
 	 */
-	private void remountSystem(boolean doRW) throws IOException, InterruptedException {
-                String mountPerms = (doRW ? "rw" : "ro");
-		Process remount = Runtime
-				.getRuntime()
-				.exec(new String[] { "su", "-c",
+	private void remountSystem(boolean doRW) throws IOException,
+			InterruptedException {
+		String mountPerms = (doRW ? "rw" : "ro");
+		Process remount = Runtime.getRuntime().exec(
+				new String[] { "su", "-c",
 						"mount -o " + mountPerms + ",remount /system" });
 		remount.waitFor();
 	}
 }
-
