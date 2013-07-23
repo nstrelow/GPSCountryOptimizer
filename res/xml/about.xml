@@ -2,7 +2,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference android:title="Current Version" android:summary="v3.0 - GDX-Version" />
-    <Preference android:title="Copyright" android:summary="© 2013,GDX" />
+    <Preference android:title="Copyright" android:summary="© 2013,Nils Strelow" />
     <Preference android:title="Email" android:summary="djnilse@gmail.com" />
     <Preference android:title="Developer" android:summary="Nils Strelow" />
 </PreferenceScreen>
