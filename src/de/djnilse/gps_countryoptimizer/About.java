@@ -6,9 +6,10 @@ import android.os.Bundle;
 public class About extends PreferenceActivity {
 
 	/** Called when the activity is first created. */
-    @Override
+	@SuppressWarnings("deprecation")
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	addPreferencesFromResource(R.xml.about);
-    }
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.about);
+	}
 }

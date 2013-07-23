@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  
-<Preference 
-	style="?android:preferenceInformationStyle"
-	android:title="Current Version"
-	android:summary="v1 - GDX-Version"/>
-  
-<Preference 
-	style="?android:preferenceInformationStyle"
-	android:title="Copyright"
-	android:summary="© 2012, Nils Strelow - djnilse"/>
-
+    <Preference android:title="Current Version" android:summary="v3.0 - GDX-Version" />
+    <Preference android:title="Copyright" android:summary="© 2013,Nils Strelow" />
+    <Preference android:title="Email" android:summary="djnilse@gmail.com" />
+    <Preference android:title="Developer" android:summary="Nils Strelow" />
 </PreferenceScreen>
