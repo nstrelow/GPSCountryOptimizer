@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  
-<Preference 
-	style="?android:preferenceInformationStyle"
-	android:title="Current Version"
-	android:summary="v3.0"/>
-  
-<Preference 
-	style="?android:preferenceInformationStyle"
-	android:title="Copyright"
-	android:summary="© 2012, Nils Strelow - djnilse"/>
-
+    <Preference android:title="Current Version" android:summary="v1.0 - Pyramid-X-Version" />
+    <Preference android:title="Copyright" android:summary="© 2013,pyramid-X" />
+    <Preference android:title="Email" android:summary="rdxperiaz@gmail.com" />
+    <Preference android:title="Developer" android:summary="S.Murali" />
 </PreferenceScreen>
