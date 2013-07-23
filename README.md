@@ -17,3 +17,8 @@ Feel free to modify the source and improve it and make a pull request
 it's always nice to have some feedback or improvements
 
 Also if you want to translate it, look at res/values/strings.xml and translated as your wish...
+
+
+ActionBarSherlock
+===================
+To make this app run you will need to download a copy of the ActionBarSherlock Library (http://actionbarsherlock.com/download.html)
